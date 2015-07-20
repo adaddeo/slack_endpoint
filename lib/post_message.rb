@@ -20,4 +20,8 @@ class PostMessage < SlackService
   def value_for(param, default = nil)
     @payload[:message][param.to_sym] || @config[param.to_s] || default
   end
+
+  def message
+    @payload[:message]
+  end
 end
