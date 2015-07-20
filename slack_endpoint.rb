@@ -10,26 +10,21 @@ require 'endpoint_base'
 # Slack Notifier client
 require 'slack-notifier'
 
+# Slack endpoint helpers
+require './lib/slack_helpers'
+require './lib/slack_service'
+require './lib/post_message'
 
 class SlackEndpoint < EndpointBase::Sinatra::Base
   endpoint_key ENV["ENDPOINT_KEY"]
+  helpers SlackHelpers
   set :logging, true
 
   post '/post_message' do
-    result 500, 'Missing Webhook URL' unless @config['webhook_url'].present?
-    message = @payload[:message]
-
-    notifier = Slack::Notifier.new @config['webhook_url']
-    notifier.channel = value_for(:channel, 'hub')
-    notifier.username = value_for(:username, 'Slack EP')
-
-    args = {
-        icon_emoji: value_for(:icon_emoji),
-        attachments: [value_for(:attachments)]
-    }
-
-    notifier.ping message[:body], args
-    result 200, 'Message sent to slack'
+    process_request do
+      post_message
+      result 200, 'Successfully sent message sent to Slack'
+    end
   end
 
   post '/ping' do
