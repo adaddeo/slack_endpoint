@@ -1,6 +1,6 @@
 module SlackHelpers
   def post_message
-    message = PostMesage.new(@payload, @config)
+    message = PostMessage.new(@payload, @config)
     message.post!
   end
 
