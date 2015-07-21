@@ -4,12 +4,12 @@ class PostMessage < SlackService
 
     notifier = Slack::Notifier.new webhook_url
 
-    notifier.channel = value_for(:channel, 'hub')
-    notifier.username = value_for(:username, 'Slack EP')
+    notifier.channel = value_for(:channel)
+    notifier.username = value_for(:username)
 
     args = {
         icon_emoji: value_for(:icon_emoji),
-        attachments: [value_for(:attachments)]
+        attachments: value_for(:attachments)
     }
 
     notifier.ping message[:body], args
